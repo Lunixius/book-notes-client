@@ -1,3 +1,7 @@
+This is the Client source code.
+
+API link here: [https://github.com/Lunixius/book-notes-client](https://github.com/Lunixius/book-notes-api/tree/main)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
