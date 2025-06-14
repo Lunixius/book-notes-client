@@ -1,61 +1,119 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
+/* Base Light & Dark Themes */
+.app.light {
   background-color: #f8f9fa;
+  color: #212529;
 }
 
+.app.dark {
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+/* App Bar */
+.app-bar {
+  position: sticky;
+  top: 0;
+  background-color: #343a40;
+  color: white;
+  padding: 1rem 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.app-bar-inner {
+  max-width: 1000px;
+  margin: auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-bar h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.toggle-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.toggle-btn:hover {
+  background-color: #5a6268;
+}
+
+/* Container and Layout */
 .container {
   padding: 2rem;
   max-width: 1000px;
   margin: auto;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
+/* Search Form */
 .search-form {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 2rem;
+  margin: 2rem 0;
 }
 
 .search-form input {
   width: 300px;
   padding: 10px;
   font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 .search-form button {
   padding: 10px 15px;
   font-size: 1rem;
   cursor: pointer;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  border: none;
 }
 
+.search-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Book Cards Grid */
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
+/* Book Card Layout (image on top) */
 .book-card {
   background-color: white;
+  color: black;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   padding: 1rem;
-  text-align: left;
+  text-align: center;
 }
 
-.book-card h3,
-.book-card p {
-  text-align: justify;
+.app.dark .book-card {
+  background-color: #1f1f1f;
+  color: #f1f1f1;
 }
-
 
 .book-card img {
-  max-width: 100%;
+  width: 100px;
   height: auto;
+  margin-bottom: 1rem;
   border-radius: 5px;
+}
+
+.book-info h3,
+.book-info p {
+  text-align: justify;
 }

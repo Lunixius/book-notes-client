@@ -5,6 +5,7 @@ import './App.css';
 function App() {
   const [query, setQuery] = useState('');
   const [books, setBooks] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -16,28 +17,42 @@ function App() {
     }
   };
 
-  return (
-    <div className="container">
-      <h1>📚 Book Finder + Notes</h1>
-      <form onSubmit={handleSearch} className="search-form">
-        <input
-          type="text"
-          placeholder="Search for books..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button type="submit">Search</button>
-      </form>
+  const toggleDarkMode = () => setDarkMode(!darkMode);
 
-      <div className="book-grid">
-        {books.map((book) => (
-          <div className="book-card" key={book.googleId || book.title}>
-            <h3>{book.title}</h3>
-            <p><strong>Author:</strong> {book.authors?.join(', ') || 'Unknown'}</p>
-            {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
-            <p>{book.description || 'No description available.'}</p>
-          </div>
-        ))}
+  return (
+    <div className={`app ${darkMode ? 'dark' : 'light'}`}>
+      <header className="app-bar">
+        <div className="app-bar-inner">
+          <h1>📚 Book Finder + Notes</h1>
+          <button onClick={toggleDarkMode} className="toggle-btn">
+            {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+          </button>
+        </div>
+      </header>
+
+      <div className="container">
+        <form onSubmit={handleSearch} className="search-form">
+          <input
+            type="text"
+            placeholder="Search for books..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button type="submit">Search</button>
+        </form>
+
+        <div className="book-grid">
+          {books.map((book) => (
+            <div className="book-card" key={book.googleId || book.title}>
+              {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
+              <div className="book-info">
+                <h3>{book.title}</h3>
+                <p><strong>Author:</strong> {book.authors?.join(', ') || 'Unknown'}</p>
+                <p>{book.description || 'No description available.'}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
