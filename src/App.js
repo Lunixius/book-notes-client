@@ -1,62 +1,105 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import BookCard from './components/BookCard';
+import SavedBooks from './components/SavedBooks';
+import './App.css';
 
 function App() {
   const [query, setQuery] = useState('');
   const [books, setBooks] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
+  const handleToggle = () => setDarkMode(!darkMode);
+
+  const handleSearch = async () => {
+    if (!query.trim()) return;
     try {
-      const res = await axios.get(`http://localhost:5000/api/search?q=${query}`);
-      setBooks(res.data);
+      const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      setBooks(data.items || []);
     } catch (err) {
-      console.error('Search error:', err);
+      console.error('Failed to fetch books:', err);
     }
   };
 
-  const toggleDarkMode = () => setDarkMode(!darkMode);
+  const saveBook = async (book) => {
+    try {
+      const res = await fetch('/api/books', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(book),
+      });
+      const data = await res.json();
+      console.log('Book saved:', data);
+    } catch (err) {
+      console.error('Error saving book:', err);
+    }
+  };
+
+  const SearchPage = () => (
+    <>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search for books..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+
+      <div className="cards-container">
+        {books.length === 0 ? (
+          <p style={{ gridColumn: '1 / -1', textAlign: 'center' }}>🔍 Start searching for books!</p>
+        ) : (
+          books.map((book) => (
+            <div key={book.id} className="book-card-wrapper">
+              <BookCard
+                title={book.volumeInfo.title}
+                author={(book.volumeInfo.authors || []).join(', ')}
+                image={book.volumeInfo.imageLinks?.thumbnail}
+                description={book.volumeInfo.description || 'No description available.'}
+                onSave={() =>
+                  saveBook({
+                    title: book.volumeInfo.title,
+                    author: (book.volumeInfo.authors || []).join(', '),
+                    notes: '', // Add notes handling later
+                  })
+                }
+              />
+            </div>
+          ))
+        )}
+      </div>
+    </>
+  );
 
   return (
-    <div className={`app ${darkMode ? 'dark' : 'light'}`}>
-      <header className="app-bar">
-        <div className="app-bar-inner">
-          <h1>📚 Book Finder + Notes</h1>
-          <button onClick={toggleDarkMode} className="toggle-btn">
-            {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
-        </div>
-      </header>
+    <Router>
+      <div className={`app-container ${darkMode ? 'dark' : ''}`}>
+        <header>
+          <h1>📚 Book Finder</h1>
+          <nav>
+            <Link to="/">Search</Link> | <Link to="/saved">Saved Books</Link>
+          </nav>
+          <div className="toggle-container">
+            <span>🌞</span>
+            <label className="toggle-switch">
+              <input type="checkbox" checked={darkMode} onChange={handleToggle} />
+              <span className="slider" />
+            </label>
+            <span>🌙</span>
+          </div>
+        </header>
 
-      <div className="container">
-        <form onSubmit={handleSearch} className="search-form">
-          <input
-            type="text"
-            placeholder="Search for books..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <button type="submit">Search</button>
-        </form>
-
-        <div className="book-grid">
-          {books.map((book) => (
-            <div className="book-card" key={book.googleId || book.title}>
-              <BookCard key={book.id} book={book} />
-              {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
-              <div className="book-info">
-                <h3>{book.title}</h3>
-                <p><strong>Author:</strong> {book.authors?.join(', ') || 'Unknown'}</p>
-                <p>{book.description || 'No description available.'}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <Routes>
+          <Route path="/" element={<SearchPage />} />
+          <Route path="/saved" element={<SavedBooks />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 
