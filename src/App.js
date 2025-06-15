@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
+import BookCard from './components/BookCard';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -44,6 +45,7 @@ function App() {
         <div className="book-grid">
           {books.map((book) => (
             <div className="book-card" key={book.googleId || book.title}>
+              <BookCard key={book.id} book={book} />
               {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
               <div className="book-info">
                 <h3>{book.title}</h3>
