@@ -82,7 +82,8 @@ function App() {
         <header>
           <h1>📚 Book Finder</h1>
           <nav>
-            <Link to="/">Search</Link> | <Link to="/saved">Saved Books</Link>
+            <Link to="/">Search</Link>
+            <Link to="/saved">Saved Books</Link>
           </nav>
           <div className="toggle-container">
             <span>🌞</span>
@@ -93,6 +94,7 @@ function App() {
             <span>🌙</span>
           </div>
         </header>
+
 
         <Routes>
           <Route path="/" element={<SearchPage />} />

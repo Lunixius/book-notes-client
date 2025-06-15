@@ -25,6 +25,42 @@ header {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/*Navbar items*/
+nav {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+nav a {
+  padding: 0.4rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #e2e8f0; /* calm light gray-blue */
+  color: #1a202c;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+nav a:hover {
+  background-color: #cbd5e0; /* slightly darker on hover */
+}
+
+.dark nav a {
+  background-color: #2d3748; /* calm dark mode button */
+  color: #f7fafc;
+}
+
+.dark nav a:hover {
+  background-color: #4a5568;
+}
+
+.saved-message {
+  color: green;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
 /* Light/Dark Toggle */
 .toggle-container {
   display: flex;
