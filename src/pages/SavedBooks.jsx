@@ -1,39 +1,41 @@
 // src/pages/SavedBooks.jsx
 
 import React, { useEffect, useState } from 'react';
+import BookCard from '../components/BookCard';
 
 function SavedBooks() {
   const [savedBooks, setSavedBooks] = useState([]);
 
   useEffect(() => {
     fetch('/api/books')
-      .then((res) => res.json())
-      .then((data) => setSavedBooks(data))
-      .catch((err) => console.error('Failed to fetch saved books:', err));
+      .then(res => res.json())
+      .then(data => setSavedBooks(data))
+      .catch(err => console.error('Failed to fetch saved books:', err));
   }, []);
 
   return (
-    <div className="saved-books-page">
-      <h2>📖 Saved Books</h2>
-      {savedBooks.length === 0 ? (
-        <p>No saved books found.</p>
-      ) : (
-        <div className="cards-container">
-          {savedBooks.map((book) => (
+    <div className="page-container">
+      <h2 className="page-title">📚 Your Saved Books</h2>
+      <div className="cards-container">
+        {savedBooks.length === 0 ? (
+          <p style={{ gridColumn: '1 / -1', textAlign: 'center' }}>No saved books yet.</p>
+        ) : (
+          savedBooks.map((book) => (
             <div key={book._id} className="book-card-wrapper">
-              <div className="book-card">
-                <img src={book.image} alt={book.title} />
-                <h3>{book.title}</h3>
-                <p><strong>Author:</strong> {book.author}</p>
-                <p>{book.description}</p>
-                <p><strong>Notes:</strong> {book.notes}</p>
-              </div>
+              <BookCard
+                title={book.title}
+                author={book.author}
+                description={book.notes}
+                image={book.image}
+                // Optional: add deleteBook here later
+              />
             </div>
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
 }
 
 export default SavedBooks;
+

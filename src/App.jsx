@@ -81,9 +81,9 @@ function App() {
       <div className={`app-container ${darkMode ? 'dark' : ''}`}>
         <header>
           <h1>📚 Book Finder</h1>
-          <nav>
-            <Link to="/">Search</Link>
-            <Link to="/saved">Saved Books</Link>
+          <nav className="nav-bar">
+            <Link to="/" className="nav-button">🔍 Search</Link>
+            <Link to="/saved" className="nav-button">📖 Saved Books</Link>
           </nav>
           <div className="toggle-container">
             <span>🌞</span>
@@ -95,14 +95,48 @@ function App() {
           </div>
         </header>
 
-
         <Routes>
-          <Route path="/" element={<SearchPage />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <div className="search-bar">
+                  <input
+                    type="text"
+                    placeholder="Search for books..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                  />
+                  <button onClick={handleSearch}>Search</button>
+                </div>
+
+                <div className="cards-container">
+                  {books.length === 0 ? (
+                    <p style={{ gridColumn: '1 / -1', textAlign: 'center' }}>🔍 Start searching for books!</p>
+                  ) : (
+                    books.map((book) => (
+                      <div key={book.id} className="book-card-wrapper">
+                        <BookCard
+                          key={book.id}
+                          title={book.volumeInfo.title}
+                          author={(book.volumeInfo.authors || []).join(', ')}
+                          image={book.volumeInfo.imageLinks?.thumbnail}
+                          description={book.volumeInfo.description || 'No description available.'}
+                          onSave={saveBook}
+                        />
+                      </div>
+                    ))
+                  )}
+                </div>
+              </>
+            }
+          />
           <Route path="/saved" element={<SavedBooks />} />
         </Routes>
       </div>
     </Router>
   );
+
 }
 
 export default App;
